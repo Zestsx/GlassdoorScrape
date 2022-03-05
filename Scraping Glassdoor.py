@@ -22,7 +22,7 @@ pagenumbers = range(1, 10)
 #Loop through pages
 for i in pagenumbers:
     pagenumber = i
-    #You need to get the url of the company reviewed and paste it here, with {pagenumber} as a variable (Example below is JLL)
+    #You need to get the url of the company reviewed and paste it here, with {pagenumber} as a variable (Example below is Meta)
     url = f'https://www.glassdoor.sg/Reviews/Meta-Reviews-E40772_P{pagenumber}.htm?sort.sortType=RD&sort.ascending=false&filter.iso3Language=eng'
     print(url)   
     hdr = {'User-Agent': 'Mozilla/5.0'}

@@ -14,20 +14,10 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
-
-
 #Information we want to scrape
 MainData = pd.DataFrame(columns = ['Value', 'Pros', 'Cons', 'Recommend', 'CEOApproval','BusinessOutlook','Rating'])
 
-print(MainData)
-    
-#Define Number of Pages
-
 pagenumbers = range(1, 10)
-
-#Test Page Number
-# i= 1
-# pagenumbers = range(i)
 
 #Loop through pages
 for i in pagenumbers:
@@ -40,14 +30,11 @@ for i in pagenumbers:
     page = urlopen(req)
     soup = BeautifulSoup(page, "html.parser")
 
-
      #Get overall rating
     Rating = soup.find_all('span', attrs = {'class':'ratingNumber mr-xsm'})
     RatingClean = []
     for x in Rating:
         RatingClean.append(x.text)
-    
-    print(RatingClean)
 
     #Get date - Role 
     ValueTitle = soup.find_all('span', attrs = {'class':'authorInfo'})
@@ -55,29 +42,12 @@ for i in pagenumbers:
     PostDateClean = []
     LocationClean = []
     Role = []
-    print(ValueTitle)
+    
     for x in ValueTitle:
         ValueClean.append(x.text)
-    print(ValueClean)
-#     for x in ValueTitle:
-#          PostDateClean.append(x.text.split("- ")[0])
-    
-#     for x in ValueTitle:
-#         Role.append((x.text.replace('\xa0', ' ').split("- ")[1]))
-
-#     for x in ValueTitle:
-#         LocationClean.append((x.text.replace('\xa0', ' ').split("- ")[1].split("in")[0]))
-
-# }
-
-    # print(PostDateClean)
-
-    # print(LocationClean)
 
     #Feedback
     Feedback = soup.find_all('div', attrs = {'class':'v2__EIReviewDetailsV2__fullWidth'})
-    for x in Feedback:
-        print(x)
 
     #Get Pros
     ProClean = []
@@ -85,15 +55,11 @@ for i in pagenumbers:
     for x in Pros:
         ProClean.append(x.text)
 
-    print(ProClean)
-
     #Get Cons
     ConClean = []
     Cons = soup.find_all('span', attrs = {'data-test':'cons'})
     for x in Cons :
         ConClean.append(x.text)
-
-    print(ConClean)
 
     sentiment_lookup = {
     'css-hcqxoa-svg': 'Approve',
@@ -109,11 +75,7 @@ for i in pagenumbers:
             y = x.find_all('svg')
             for z in y:
                 RecommendClean.append(z.get('class')[1])
-
-    print(RecommendClean)
-    
-    # print(RecommendClean)
-
+                
     #CEO Approval
     CEOApprovalClean = []
     CEOApproval= soup.find_all('div', attrs = {'class':'d-flex align-items-center mr-std'})
@@ -122,9 +84,6 @@ for i in pagenumbers:
             y = x.find_all('svg')
             for z in y:
                 CEOApprovalClean.append(z.get('class')[1])
-
-    print(CEOApprovalClean)
-    
 
     #BusinessOutlook
     BusinessOutlookClean = []
@@ -135,11 +94,6 @@ for i in pagenumbers:
             for z in y:
                 BusinessOutlookClean.append(z.get('class')[1])
 
-    print(BusinessOutlookClean)
-    
-    
-
-    
 
     df = pd.DataFrame(list(zip(ValueClean, ProClean, ConClean, RecommendClean, CEOApprovalClean, BusinessOutlookClean, RatingClean)), columns = ['Value', 'Pros', 'Cons', 'Recommend', 'CEOApproval','BusinessOutlook','Rating'])
 
@@ -147,10 +101,7 @@ for i in pagenumbers:
     df['CEOApproval'] =   df['CEOApproval'] .apply(lambda x: sentiment_lookup.get(x))
     df['BusinessOutlook'] =   df['BusinessOutlook'] .apply(lambda x: sentiment_lookup.get(x))
 
-    print(df)
-
-
-    
+ 
     MainData = pd.concat([MainData,df])
    
 

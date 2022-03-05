@@ -1,5 +1,5 @@
-
-
+from google.colab import drive
+drive.mount('/content/drive')
 import os
 import re
 from re import search
@@ -15,7 +15,6 @@ from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 
 
-Company = input("Enter company: ")
 
 #Information we want to scrape
 MainData = pd.DataFrame(columns = ['Value', 'Pros', 'Cons', 'Recommend', 'CEOApproval','BusinessOutlook','Rating'])
@@ -34,7 +33,7 @@ pagenumbers = range(1, 10)
 for i in pagenumbers:
     pagenumber = i
     #You need to get the url of the company reviewed and paste it here, with {pagenumber} as a variable (Example below is JLL)
-    url = f'https://www.glassdoor.sg/Reviews/JLL-Reviews-E5779_P{pagenumber}.htm?sort.sortType=RD&sort.ascending=false&filter.iso3Language=eng'
+    url = f'https://www.glassdoor.sg/Reviews/Meta-Reviews-E40772_P{pagenumber}.htm?sort.sortType=RD&sort.ascending=false&filter.iso3Language=eng'
     print(url)   
     hdr = {'User-Agent': 'Mozilla/5.0'}
     req = Request(url,headers=hdr)
@@ -138,7 +137,7 @@ for i in pagenumbers:
 
     print(BusinessOutlookClean)
     
-
+    
 
     
 
@@ -167,11 +166,10 @@ print(MainData)
 # Save Results
 today_str = date.today().strftime('%Y-%m-%d')
 print(today_str)
-save_folder = os.path.dirname(os.path.realpath(__file__))
-print(save_folder)
-file_name = 'Scrape' + '_' + Company + today_str + '_Analysis.csv'
-print(file_name)
-save_path = save_folder + '\\' + file_name
+file_name = 'Scrape' + '_'  + today_str + '_Analysis'
+
+save_path = '/content/drive/My Drive/'+'Insert Google Drive Folder'
+
 print('Saving results to ' + save_path) 
 
-MainData.to_csv(save_path, index=False)
+MainData.to_csv(f'/content/drive/My Drive/Glassdoor/{file_name}.csv')
